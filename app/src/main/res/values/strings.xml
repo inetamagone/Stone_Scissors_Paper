@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Stone_Scissors_Paper</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="me">Me:</string>
+    <string name="first_score_text">%1$s</string>
+    <string name="my_phone">My Phone:</string>
+    <string name="play">PLAY</string>
+    <string name="score_history">Score History</string>
+</resources>
