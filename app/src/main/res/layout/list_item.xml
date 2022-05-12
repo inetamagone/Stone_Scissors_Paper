@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/background_light"
+        android:background="@color/background"
         android:weightSum="4.2">
         <TextView
             android:id="@+id/scores_first_player"
@@ -43,9 +43,8 @@
             android:layout_height="wrap_content"
             android:text="@string/separate_scores"
             android:layout_weight="0.2"
-            android:textSize="@dimen/text_30"
+            android:textSize="@dimen/text_20"
             android:textColor="@color/light_grey"
-            android:textStyle="bold"
             android:gravity="center"/>
         <TextView
             android:id="@+id/scores_phone_score"

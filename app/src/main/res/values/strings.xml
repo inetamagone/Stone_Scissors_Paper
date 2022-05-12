@@ -21,5 +21,8 @@
     <string name="score_history_deleted">All Scores are deleted</string>
     <string name="delete_all">Delete All</string>
     <string name="question_delete_all">Do you want to delete all Scores?</string>
-    <string name="score_equals">Equals</string>
+    <string name="score_equals">EQUALS</string>
+    <string name="phone_wins">Phone Wins</string>
+    <string name="you_win">You Win</string>
+    <string name="win_message">Who Wins?</string>
 </resources>

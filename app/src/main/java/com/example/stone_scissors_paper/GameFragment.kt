@@ -2,12 +2,10 @@ package com.example.stone_scissors_paper
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.stone_scissors_paper.data.GameData
@@ -49,7 +47,10 @@ class GameFragment : Fragment() {
         phoneScore.text = "0"
 
         binding.restartButton.setOnClickListener {
-            val scoreToSave = GameData(myScore = playerScore.text.toString(), phoneScore = phoneScore.text.toString())
+            val scoreToSave = GameData(
+                myScore = playerScore.text.toString(),
+                phoneScore = phoneScore.text.toString()
+            )
             viewModel.insertScoreInDb(scoreToSave)
 
             playerScore.text = "0"
@@ -61,82 +62,74 @@ class GameFragment : Fragment() {
             navController.navigate(R.id.action_gameFragment_to_scoreFragment, Bundle())
         }
 
-        binding.playButton.setOnClickListener {
-
-            val playersMove = (1..3).random()
-            Log.d(TAG, "$playersMove")
+        binding.paperButton.setOnClickListener {
+            val playersMove = 1
             val phoneMove = (1..3).random()
-            Log.d(TAG, "$phoneMove")
 
-            when (getScore(playersMove, phoneMove)) {
-                2 -> {
-                    Log.d(TAG, "Phone wins")
-                    val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
-                    binding.secondPlayerScore.text = scoreValue.toString()
-                }
-                3 -> {
-                    Log.d(TAG, "Player wins")
-                    val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
-                    binding.firstPlayerScore.text = scoreValue.toString()
-                }
-                else -> {
-                    Log.d(TAG, "Equals")
-                    val toast = Toast.makeText(
-                        requireContext(),
-                        getString(R.string.score_equals),
-                        Toast.LENGTH_SHORT
-                    )
-                    toast.setGravity(Gravity.TOP, 0, 0)
-                    toast.show()
-                }
+            setImages(playersMove, phoneMove)
+            setCurrentScore(playersMove, phoneMove)
+        }
+        binding.scissorsButton.setOnClickListener {
+            val playersMove = 2
+            val phoneMove = (1..3).random()
+
+            setImages(playersMove, phoneMove)
+            setCurrentScore(playersMove, phoneMove)
+        }
+        binding.stoneButton.setOnClickListener {
+            val playersMove = 3
+            val phoneMove = (1..3).random()
+
+            setImages(playersMove, phoneMove)
+            setCurrentScore(playersMove, phoneMove)
+        }
+    }
+
+    private fun setImages(playersMove: Int, phoneMove: Int) {
+        when (playersMove) {
+            1 -> {
+                binding.firstPlayerImage.setImageResource(ImageOption.PAPER.image)
             }
-
-            when (playersMove) {
-                1 -> {
-                    binding.firstPlayerImage.setImageResource(ImageOption.PAPER.image) }
-                2 -> {
-                    binding.firstPlayerImage.setImageResource(ImageOption.SCISSORS.image)
-                }
-                else -> {
-                    binding.firstPlayerImage.setImageResource(ImageOption.STONE.image)
-                }
+            2 -> {
+                binding.firstPlayerImage.setImageResource(ImageOption.SCISSORS.image)
             }
-
-            when (phoneMove) {
-                1 -> {
-                    binding.secondPlayerImage.setImageResource(ImageOption.PAPER.image)
-                }
-                2 -> {
-                    binding.secondPlayerImage.setImageResource(ImageOption.SCISSORS.image)
-                }
-                else -> {
-                    binding.secondPlayerImage.setImageResource(ImageOption.STONE.image)
-                }
+            else -> {
+                binding.firstPlayerImage.setImageResource(ImageOption.STONE.image)
+            }
+        }
+        when (phoneMove) {
+            1 -> {
+                binding.secondPlayerImage.setImageResource(ImageOption.PAPER.image)
+            }
+            2 -> {
+                binding.secondPlayerImage.setImageResource(ImageOption.SCISSORS.image)
+            }
+            else -> {
+                binding.secondPlayerImage.setImageResource(ImageOption.STONE.image)
             }
         }
     }
 
-    /* result = 1 - equals
-        result = 2 - phone wins
-        result = 3 - player wins */
-    private fun getScore(playerMove: Int, phoneMove: Int): Int {
-        var result = 0
+    // result = 1 -> equals; result = 2 -> phone wins; result = 3 -> player wins
+    private fun setCurrentScore(playerMove: Int, phoneMove: Int) {
         when {
             // equals
             playerMove == phoneMove -> {
-                result = 1
+                binding.winMessage.text = getString(R.string.score_equals)
             }
             // Phone wins
             playerMove == 1 && phoneMove == 2 || playerMove == 2 && phoneMove == 3 || playerMove == 3 && phoneMove == 1 -> {
-                result = 2
+                val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
+                binding.secondPlayerScore.text = scoreValue.toString()
+                binding.winMessage.text = getString(R.string.phone_wins)
             }
             // Player wins
             else -> {
-                result = 3
+                val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
+                binding.firstPlayerScore.text = scoreValue.toString()
+                binding.winMessage.text = getString(R.string.you_win)
             }
         }
-        Log.d(TAG, "$result")
-        return result
     }
 
     override fun onDestroyView() {

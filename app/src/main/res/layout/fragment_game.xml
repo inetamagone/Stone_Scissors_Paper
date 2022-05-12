@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="2">
-
             <Button
                 android:id="@+id/restart_button"
                 android:layout_width="@dimen/space_120"
@@ -51,7 +50,7 @@
         </LinearLayout>
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/space_20" />
+            android:layout_height="@dimen/space_10" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/me_game"
-                android:textSize="@dimen/text_30"
+                android:textSize="@dimen/text_25"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
                 android:fontFamily="serif" />
@@ -73,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/first_score_text"
-                android:textSize="@dimen/text_30"
+                android:textSize="@dimen/text_25"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
                 android:fontFamily="serif" />
@@ -83,9 +82,16 @@
             android:layout_width="@dimen/space_200"
             android:layout_height="@dimen/space_200"
             android:src="@drawable/scissors"/>
-        <Space
+        <TextView
+            android:id="@+id/win_message"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/space_10" />
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_25"
+            android:textColor="@color/light_grey"
+            android:textStyle="italic"
+            android:fontFamily="serif"
+            android:text="@string/win_message"/>
+
         <ImageView
             android:id="@+id/second_player_image"
             android:layout_width="@dimen/space_200"
@@ -112,28 +118,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/phone_score_text"
-                android:textSize="@dimen/text_30"
+                android:textSize="@dimen/text_25"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
                 android:fontFamily="serif" />
         </LinearLayout>
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/space_40" />
-        <Button
-            android:id="@+id/play_button"
-            android:layout_width="@dimen/space_140"
-            android:layout_height="@dimen/space_70"
-            android:text="@string/play"
-            android:textSize="@dimen/text_25"
-            android:textColor="@color/light_grey"
-            android:textStyle="bold"
-            android:fontFamily="serif"
-            android:backgroundTint="@color/button_play"
-            android:shadowRadius="16"
-            android:shadowColor="@color/purple_700"
-            android:shadowDx="10"/>
-
+            android:layout_height="@dimen/space_20" />
+        <LinearLayout
+            android:id="@+id/image_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <ImageView
+                android:id="@+id/paper_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/paper"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+            <ImageView
+                android:id="@+id/scissors_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/scissors"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+            <ImageView
+                android:id="@+id/stone_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/stone"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
