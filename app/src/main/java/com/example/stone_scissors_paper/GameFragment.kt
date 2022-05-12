@@ -42,9 +42,11 @@ class GameFragment : Fragment() {
 
         val playerScore = binding.firstPlayerScore
         val phoneScore = binding.secondPlayerScore
+        val winnerMessage = binding.winMessage
 
         playerScore.text = "0"
         phoneScore.text = "0"
+        winnerMessage.text = getString(R.string.win_message)
 
         binding.restartButton.setOnClickListener {
             val scoreToSave = GameData(
@@ -55,6 +57,7 @@ class GameFragment : Fragment() {
 
             playerScore.text = "0"
             phoneScore.text = "0"
+            winnerMessage.text = getString(R.string.win_message)
         }
 
         val navController = Navigation.findNavController(view)
