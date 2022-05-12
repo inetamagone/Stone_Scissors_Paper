@@ -12,7 +12,7 @@ data class GameData(
     var id: Int? = null,
     var timestamp: Long = System.currentTimeMillis()/1000,
     @ColumnInfo(name = "my_score")
-    var myScore: Int,
+    var myScore: String,
     @ColumnInfo(name = "phone_score")
-    var phoneScore: Int
+    var phoneScore: String
 )

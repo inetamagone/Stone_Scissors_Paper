@@ -15,4 +15,10 @@
     <string name="restart_btn_text">RESTART</string>
     <string name="scores_btn_text">SCORES</string>
     <string name="separate_scores">:</string>
+    <string name="description_delete_all_button">delete all button</string>
+    <string name="ok">OK</string>
+    <string name="no">No</string>
+    <string name="score_history_deleted">All Scores are deleted</string>
+    <string name="delete_all">Delete All</string>
+    <string name="question_delete_all">Do you want to delete all Scores?</string>
 </resources>
