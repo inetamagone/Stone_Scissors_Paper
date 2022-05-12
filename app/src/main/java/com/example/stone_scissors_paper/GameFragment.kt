@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.stone_scissors_paper.data.GameData
+import com.example.stone_scissors_paper.data.ImageOption
 import com.example.stone_scissors_paper.databinding.FragmentGameBinding
 import com.example.stone_scissors_paper.repository.ScoreRepository
 import com.example.stone_scissors_paper.viewModels.SharedViewModel
@@ -57,6 +58,31 @@ class GameFragment : Fragment() {
 
         binding.playButton.setOnClickListener {
             // TODO: Action to change images, display results and scores
+            val playersMove = (1..4).random()
+            val phoneMove = (1..4).random()
+
+            when (playersMove) {
+                1 -> {
+                    binding.firstPlayerImage.setImageResource(ImageOption.PAPER.image) }
+                2 -> {
+                    binding.firstPlayerImage.setImageResource(ImageOption.SCISSORS.image)
+                }
+                else -> {
+                    binding.firstPlayerImage.setImageResource(ImageOption.STONE.image)
+                }
+            }
+
+            when (phoneMove) {
+                1 -> {
+                    binding.secondPlayerImage.setImageResource(ImageOption.PAPER.image)
+                }
+                2 -> {
+                    binding.secondPlayerImage.setImageResource(ImageOption.SCISSORS.image)
+                }
+                else -> {
+                    binding.secondPlayerImage.setImageResource(ImageOption.STONE.image)
+                }
+            }
         }
     }
 
