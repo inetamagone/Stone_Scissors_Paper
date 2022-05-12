@@ -12,5 +12,6 @@
     <color name="background_dark">#0a00b6</color>
     <color name="background_light">#9d46ff</color>
     <color name="light_grey">#eeeeee</color>
-    #eeeeee
+    <color name="button_play">#039be5</color>
+    <color name="button_score">#1a237e</color>
 </resources>

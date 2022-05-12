@@ -2,9 +2,17 @@
     <string name="app_name">Stone_Scissors_Paper</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="me">Me:</string>
+    <string name="me_game">Me:</string>
+    <string name="me">Me</string>
+    <string name="my_phone">My Phone</string>
+    <string name="my_phone_game">My Phone:</string>
     <string name="first_score_text">%1$s</string>
-    <string name="my_phone">My Phone:</string>
+    <string name="score_text">%1$s</string>
+    <string name="phone_score_text">%1$s</string>
+    <string name="phone_score">%1$s</string>
     <string name="play">PLAY</string>
     <string name="score_history">Score History</string>
+    <string name="restart_btn_text">RESTART</string>
+    <string name="scores_btn_text">SCORES</string>
+    <string name="separate_scores">:</string>
 </resources>

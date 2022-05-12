@@ -14,12 +14,53 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/restart_button"
+                android:layout_width="@dimen/space_120"
+                android:layout_height="@dimen/space_50"
+                android:layout_weight="1"
+                android:backgroundTint="@color/background_dark"
+                android:fontFamily="serif"
+                android:shadowColor="@color/purple_700"
+                android:shadowDx="10"
+                android:shadowRadius="16"
+                android:text="@string/restart_btn_text"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_16"
+                android:textStyle="bold" />
+            <Space
+                android:layout_width="@dimen/space_120"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/score_button"
+                android:layout_width="@dimen/space_120"
+                android:layout_height="@dimen/space_50"
+                android:text="@string/scores_btn_text"
+                android:textSize="@dimen/text_16"
+                android:textColor="@color/light_grey"
+                android:textStyle="bold"
+                android:fontFamily="serif"
+                android:backgroundTint="@color/button_score"
+                android:shadowRadius="16"
+                android:shadowColor="@color/purple_700"
+                android:shadowDx="10"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_20" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/first_player"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/me"
+                android:text="@string/me_game"
                 android:textSize="@dimen/text_30"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
@@ -39,16 +80,16 @@
         </LinearLayout>
         <ImageView
             android:id="@+id/first_player_image"
-            android:layout_width="@dimen/space_180"
-            android:layout_height="@dimen/space_180"
+            android:layout_width="@dimen/space_200"
+            android:layout_height="@dimen/space_200"
             android:src="@drawable/scissors"/>
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/space_20" />
+            android:layout_height="@dimen/space_10" />
         <ImageView
             android:id="@+id/second_player_image"
-            android:layout_width="@dimen/space_180"
-            android:layout_height="@dimen/space_180"
+            android:layout_width="@dimen/space_200"
+            android:layout_height="@dimen/space_200"
             android:src="@drawable/stone" />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -58,7 +99,7 @@
                 android:id="@+id/second_player"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/my_phone"
+                android:text="@string/my_phone_game"
                 android:textSize="@dimen/text_25"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
@@ -70,7 +111,7 @@
                 android:id="@+id/second_player_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/first_score_text"
+                android:text="@string/phone_score_text"
                 android:textSize="@dimen/text_30"
                 android:textColor="@color/light_grey"
                 android:textStyle="bold"
@@ -88,10 +129,10 @@
             android:textColor="@color/light_grey"
             android:textStyle="bold"
             android:fontFamily="serif"
-            android:backgroundTint="@color/background_dark"
-            android:shadowRadius="10"
+            android:backgroundTint="@color/button_play"
+            android:shadowRadius="16"
             android:shadowColor="@color/purple_700"
-            android:shadowDx="20"/>
+            android:shadowDx="10"/>
 
     </LinearLayout>
 

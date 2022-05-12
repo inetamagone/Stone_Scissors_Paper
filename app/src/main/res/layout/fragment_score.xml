@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/space_5"
     tools:context=".ScoreFragment">
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,17 +19,43 @@
             android:text="@string/score_history"
             android:textColor="@color/light_grey"
             android:textStyle="bold"
-            android:fontFamily="serif"/>
+            android:fontFamily="serif"
+            android:paddingTop="@dimen/space_5"/>
         <Space
             android:layout_width="wrap_content"
-            android:layout_height="10dp" />
-
+            android:layout_height="@dimen/space_20" />
+        <LinearLayout
+            android:id="@+id/image_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <ImageView
+                android:layout_width="@dimen/space_50"
+                android:layout_height="@dimen/space_50"
+                android:src="@drawable/scissors"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="@dimen/space_50"
+                android:layout_height="@dimen/space_50"
+                android:src="@drawable/paper"
+                android:layout_weight="1"/>
+            <ImageView
+                android:layout_width="@dimen/space_50"
+                android:layout_height="@dimen/space_50"
+                android:src="@drawable/stone"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_10" />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/score_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/score_title" />
+            app:layout_constraintTop_toBottomOf="@+id/image_container"
+            android:padding="@dimen/space_5"/>
     </LinearLayout>
 
 

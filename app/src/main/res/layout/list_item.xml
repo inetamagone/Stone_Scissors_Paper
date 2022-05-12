@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/background_light"
-        android:weightSum="2">
+        android:weightSum="4.2">
         <TextView
-            android:id="@+id/first_player"
+            android:id="@+id/scores_first_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/me"
-            android:textSize="@dimen/text_30"
+            android:textSize="@dimen/text_20"
             android:textColor="@color/light_grey"
             android:textStyle="bold"
             android:fontFamily="serif"
@@ -25,18 +25,52 @@
             android:paddingTop="@dimen/space_10"
             android:paddingBottom="@dimen/space_10"
             android:paddingStart="@dimen/space_40"/>
-        <Space
-            android:layout_width="@dimen/space_20"
-            android:layout_height="wrap_content" />
+
         <TextView
-            android:id="@+id/first_player_score"
+            android:id="@+id/scores_player_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/first_score_text"
-            android:textSize="@dimen/text_30"
+            android:text="@string/score_text"
+            android:textSize="@dimen/text_20"
             android:textColor="@color/light_grey"
             android:textStyle="bold"
             android:fontFamily="serif"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:gravity="end"
+            android:paddingEnd="@dimen/space_5"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/separate_scores"
+            android:layout_weight="0.2"
+            android:textSize="@dimen/text_30"
+            android:textColor="@color/light_grey"
+            android:textStyle="bold"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/scores_phone_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone_score"
+            android:textSize="@dimen/text_20"
+            android:textColor="@color/light_grey"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:paddingStart="@dimen/space_5"/>
+        <TextView
+            android:id="@+id/phone_second_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/my_phone"
+            android:textSize="@dimen/text_20"
+            android:textColor="@color/light_grey"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/space_10"
+            android:paddingBottom="@dimen/space_10" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
