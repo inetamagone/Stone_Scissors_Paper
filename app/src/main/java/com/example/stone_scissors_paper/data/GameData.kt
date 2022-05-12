@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey
 data class GameData(
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null,
+    var timestamp: Long = System.currentTimeMillis()/1000,
     @ColumnInfo(name = "my_score")
     var myScore: Int,
     @ColumnInfo(name = "phone_score")
