@@ -2,10 +2,12 @@ package com.example.stone_scissors_paper
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.stone_scissors_paper.data.GameData
@@ -40,10 +42,13 @@ class GameFragment : Fragment() {
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
-        binding.restartButton.setOnClickListener {
-            val playerScore = binding.firstPlayerScore
-            val phoneScore = binding.secondPlayerScore
+        val playerScore = binding.firstPlayerScore
+        val phoneScore = binding.secondPlayerScore
 
+        playerScore.text = "0"
+        phoneScore.text = "0"
+
+        binding.restartButton.setOnClickListener {
             val scoreToSave = GameData(myScore = playerScore.text.toString(), phoneScore = phoneScore.text.toString())
             viewModel.insertScoreInDb(scoreToSave)
 
@@ -57,9 +62,34 @@ class GameFragment : Fragment() {
         }
 
         binding.playButton.setOnClickListener {
-            // TODO: Action to change images, display results and scores
-            val playersMove = (1..4).random()
-            val phoneMove = (1..4).random()
+
+            val playersMove = (1..3).random()
+            Log.d(TAG, "$playersMove")
+            val phoneMove = (1..3).random()
+            Log.d(TAG, "$phoneMove")
+
+            when (getScore(playersMove, phoneMove)) {
+                2 -> {
+                    Log.d(TAG, "Phone wins")
+                    val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
+                    binding.secondPlayerScore.text = scoreValue.toString()
+                }
+                3 -> {
+                    Log.d(TAG, "Player wins")
+                    val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
+                    binding.firstPlayerScore.text = scoreValue.toString()
+                }
+                else -> {
+                    Log.d(TAG, "Equals")
+                    val toast = Toast.makeText(
+                        requireContext(),
+                        getString(R.string.score_equals),
+                        Toast.LENGTH_SHORT
+                    )
+                    toast.setGravity(Gravity.TOP, 0, 0)
+                    toast.show()
+                }
+            }
 
             when (playersMove) {
                 1 -> {
@@ -84,6 +114,29 @@ class GameFragment : Fragment() {
                 }
             }
         }
+    }
+
+    /* result = 1 - equals
+        result = 2 - phone wins
+        result = 3 - player wins */
+    private fun getScore(playerMove: Int, phoneMove: Int): Int {
+        var result = 0
+        when {
+            // equals
+            playerMove == phoneMove -> {
+                result = 1
+            }
+            // Phone wins
+            playerMove == 1 && phoneMove == 2 || playerMove == 2 && phoneMove == 3 || playerMove == 3 && phoneMove == 1 -> {
+                result = 2
+            }
+            // Player wins
+            else -> {
+                result = 3
+            }
+        }
+        Log.d(TAG, "$result")
+        return result
     }
 
     override fun onDestroyView() {
