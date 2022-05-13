@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Stone_Scissors_Paper</string>
-
     <string name="me_game">Me:</string>
     <string name="me">Me</string>
     <string name="my_phone">My Phone</string>

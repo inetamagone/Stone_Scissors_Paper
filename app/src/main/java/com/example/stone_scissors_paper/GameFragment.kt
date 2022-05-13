@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.stone_scissors_paper.data.GameData
@@ -69,22 +70,34 @@ class GameFragment : Fragment() {
             val playersMove = 1
             val phoneMove = (1..3).random()
 
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-            setCurrentScore(playersMove, phoneMove)
+            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+                setScore(workerScore)
+            })
         }
         binding.scissorsButton.setOnClickListener {
             val playersMove = 2
             val phoneMove = (1..3).random()
 
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-            setCurrentScore(playersMove, phoneMove)
+            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+                setScore(workerScore)
+            })
+//            setImages(playersMove, phoneMove)
+//            setCurrentScore(playersMove, phoneMove)
         }
         binding.stoneButton.setOnClickListener {
             val playersMove = 3
             val phoneMove = (1..3).random()
 
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-            setCurrentScore(playersMove, phoneMove)
+
+            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+                setScore(workerScore)
+            })
         }
     }
 
@@ -114,26 +127,44 @@ class GameFragment : Fragment() {
     }
 
     // result = 1 -> equals; result = 2 -> phone wins; result = 3 -> player wins
-    private fun setCurrentScore(playerMove: Int, phoneMove: Int) {
-        when {
-            // equals
-            playerMove == phoneMove -> {
-                binding.winMessage.text = getString(R.string.score_equals)
-            }
-            // Phone wins
-            playerMove == 1 && phoneMove == 2 || playerMove == 2 && phoneMove == 3 || playerMove == 3 && phoneMove == 1 -> {
-                val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
-                binding.secondPlayerScore.text = scoreValue.toString()
-                binding.winMessage.text = getString(R.string.phone_wins)
-            }
-            // Player wins
-            else -> {
-                val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
-                binding.firstPlayerScore.text = scoreValue.toString()
-                binding.winMessage.text = getString(R.string.you_win)
-            }
+    private fun setScore(workerScore: Int) {
+        // equals
+        if (workerScore == 1) {
+            binding.winMessage.text = getString(R.string.score_equals)
+
+        } // Phone wins
+        else if (workerScore == 2) {
+            val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
+            binding.secondPlayerScore.text = scoreValue.toString()
+            binding.winMessage.text = getString(R.string.phone_wins)
+        } // Player wins
+        else {
+            val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
+            binding.firstPlayerScore.text = scoreValue.toString()
+            binding.winMessage.text = getString(R.string.you_win)
         }
     }
+
+//    private fun setCurrentScore(playerMove: Int, phoneMove: Int) {
+//        when {
+//            // equals
+//            playerMove == phoneMove -> {
+//                binding.winMessage.text = getString(R.string.score_equals)
+//            }
+//            // Phone wins
+//            playerMove == 1 && phoneMove == 2 || playerMove == 2 && phoneMove == 3 || playerMove == 3 && phoneMove == 1 -> {
+//                val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
+//                binding.secondPlayerScore.text = scoreValue.toString()
+//                binding.winMessage.text = getString(R.string.phone_wins)
+//            }
+//            // Player wins
+//            else -> {
+//                val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
+//                binding.firstPlayerScore.text = scoreValue.toString()
+//                binding.winMessage.text = getString(R.string.you_win)
+//            }
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -13,7 +13,7 @@ interface ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertScore(gameData: GameData)
 
-    @Query("SELECT * FROM game_scores ORDER BY timestamp ASC")
+    @Query("SELECT * FROM game_scores ORDER BY timestamp DESC")
     fun getAllScores(): LiveData<List<GameData>>
 
     @Query("DELETE FROM game_scores")
