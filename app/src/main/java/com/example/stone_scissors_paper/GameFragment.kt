@@ -33,28 +33,37 @@ class GameFragment : Fragment() {
     ): View {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         Log.d(TAG, "OnCreateView")
+
+        val repository = ScoreRepository(requireContext())
+        val factory = ViewModelFactory(this, repository)
+        viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
+
+        viewModel.savedStateData.observe(viewLifecycleOwner) { savedGameScore ->
+            if (savedGameScore == null) {
+                binding.firstPlayerScore.text = "0"
+                binding.secondPlayerScore.text = "0"
+                binding.winMessage.text = getString(R.string.win_message)
+            } else {
+                binding.firstPlayerScore.text = savedGameScore.myScore
+                binding.secondPlayerScore.text = savedGameScore.phoneScore
+                binding.winMessage.text = savedGameScore.winnerMessage
+            }
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val repository = ScoreRepository(requireContext())
-        val factory = ViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
-
         val playerScore = binding.firstPlayerScore
         val phoneScore = binding.secondPlayerScore
         val winnerMessage = binding.winMessage
 
-        playerScore.text = "0"
-        phoneScore.text = "0"
-        winnerMessage.text = getString(R.string.win_message)
-
         binding.restartButton.setOnClickListener {
             val scoreToSave = GameData(
                 myScore = playerScore.text.toString(),
-                phoneScore = phoneScore.text.toString()
+                phoneScore = phoneScore.text.toString(),
+                winnerMessage = winnerMessage.text.toString()
             )
             viewModel.insertScoreInDb(scoreToSave)
 
@@ -65,6 +74,11 @@ class GameFragment : Fragment() {
 
         val navController = Navigation.findNavController(view)
         binding.scoreButton.setOnClickListener {
+            val playersScoreToSave = playerScore.text.toString()
+            val phoneScoreToSave = phoneScore.text.toString()
+            val messageToSave = winnerMessage.text.toString()
+            val gameData = GameData(myScore = playersScoreToSave, phoneScore = phoneScoreToSave, winnerMessage = messageToSave)
+            viewModel.saveState(gameData)
             navController.navigate(R.id.action_gameFragment_to_scoreFragment, Bundle())
         }
 

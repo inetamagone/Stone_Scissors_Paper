@@ -14,5 +14,7 @@ data class GameData(
     @ColumnInfo(name = "my_score")
     var myScore: String,
     @ColumnInfo(name = "phone_score")
-    var phoneScore: String
+    var phoneScore: String,
+    @ColumnInfo(name = "winner_message")
+    var winnerMessage: String
 )
