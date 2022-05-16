@@ -1,8 +1,6 @@
 package com.example.stone_scissors_paper.viewModels
 
-import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.work.*
 import com.example.stone_scissors_paper.data.GameData
@@ -11,15 +9,13 @@ import com.example.stone_scissors_paper.workers.GameWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private const val TAG = "SharedViewModel"
-
 class SharedViewModel(private val repository: ScoreRepository) : ViewModel() {
 
     companion object {
         const val PLAYERS_MOVE = "players_move"
         const val PHONE_MOVE = "phone_move"
     }
-//    var workerScore: MutableLiveData<Int>? = null
+
     lateinit var outputWorkInfo: LiveData<WorkInfo>
 
     fun playGame(context: Context, playersMove: Int, phoneMove: Int): LiveData<WorkInfo> {
@@ -32,30 +28,17 @@ class SharedViewModel(private val repository: ScoreRepository) : ViewModel() {
             .putInt(PHONE_MOVE, phoneMove)
             .build()
 
-        oneTimeWorkRequest
+        val myRequest = oneTimeWorkRequest
             .setInputData(data)
             .build()
 
         workManager
-            .enqueue(oneTimeWorkRequest.build())
+            .enqueueUniqueWork("my_unique_work", ExistingWorkPolicy.KEEP, myRequest)
 
         outputWorkInfo = workManager
-            .getWorkInfoByIdLiveData(oneTimeWorkRequest.build().id).map { it }
+            .getWorkInfoByIdLiveData(myRequest.id)
         return outputWorkInfo
     }
-
-//    fun observeInViewModel(): Observer<WorkInfo> {
-//        return Observer { listOfWorkInfo ->
-//            if (listOfWorkInfo.state.isFinished) {
-//                val scoreValue = listOfWorkInfo.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-//                Log.d(TAG, "scoreValue: $scoreValue")
-//                setLiveData(scoreValue)
-//            }
-//        }
-//    }
-//    fun setLiveData(scoreValue: Int) {
-//        workerScore?.value = scoreValue
-//    }
 
     fun insertScoreInDb(gameData: GameData) {
         viewModelScope.launch(Dispatchers.IO) {

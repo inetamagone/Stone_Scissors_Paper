@@ -1,6 +1,5 @@
 package com.example.stone_scissors_paper
 
-import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -76,19 +75,12 @@ class GameFragment : Fragment() {
             viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
-                onStateChange(it, binding)
-//                if (it.state == WorkInfo.State.SUCCEEDED) {
-//                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-//                    Log.d(TAG, "workerResultValue: $workerResultValue")
-//                    setScore(workerResultValue)
-//                } else {
-//                    Log.d(TAG, "WorkInfoData is null")
-//                    //return@Observer
-//                }
+                if (it != null) {
+                    onStateChange(it, binding)
+                } else {
+                    Log.d(TAG, "WorkInfo is null")
+                }
             })
-//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-//                setScore(workerScore)
-//            })
         }
 
         binding.scissorsButton.setOnClickListener {
@@ -98,17 +90,12 @@ class GameFragment : Fragment() {
             viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
-                if (it.state.isFinished) {
-                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-                    Log.d(TAG, "workerResultValue: $workerResultValue")
-                    setScore(workerResultValue)
+                if (it != null) {
+                    onStateChange(it, binding)
+                } else {
+                    Log.d(TAG, "WorkInfo is null")
                 }
             })
-//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-//                setScore(workerScore)
-//            })
-//            setImages(playersMove, phoneMove)
-//            setCurrentScore(playersMove, phoneMove)
         }
         binding.stoneButton.setOnClickListener {
             val playersMove = 3
@@ -117,22 +104,21 @@ class GameFragment : Fragment() {
             viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
-                if (it.state.isFinished) {
-                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-                    Log.d(TAG, "workerResultValue: $workerResultValue")
-                    setScore(workerResultValue)
+                if (it != null) {
+                    onStateChange(it, binding)
+                } else {
+                    Log.d(TAG, "WorkInfo is null")
                 }
             })
-//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-//                setScore(workerScore)
-//            })
         }
     }
 
     private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) {
         binding.apply {
-            val outPutData = it.outputData
-            setScore(outPutData.getInt(GameWorker.SCORE_VALUE, 0))
+            val outPutData = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+            if (outPutData != 0) {
+                setScore(outPutData)
+            }
         }
     }
 
@@ -179,27 +165,6 @@ class GameFragment : Fragment() {
             binding.winMessage.text = getString(R.string.you_win)
         }
     }
-
-//    private fun setCurrentScore(playerMove: Int, phoneMove: Int) {
-//        when {
-//            // equals
-//            playerMove == phoneMove -> {
-//                binding.winMessage.text = getString(R.string.score_equals)
-//            }
-//            // Phone wins
-//            playerMove == 1 && phoneMove == 2 || playerMove == 2 && phoneMove == 3 || playerMove == 3 && phoneMove == 1 -> {
-//                val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
-//                binding.secondPlayerScore.text = scoreValue.toString()
-//                binding.winMessage.text = getString(R.string.phone_wins)
-//            }
-//            // Player wins
-//            else -> {
-//                val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
-//                binding.firstPlayerScore.text = scoreValue.toString()
-//                binding.winMessage.text = getString(R.string.you_win)
-//            }
-//        }
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

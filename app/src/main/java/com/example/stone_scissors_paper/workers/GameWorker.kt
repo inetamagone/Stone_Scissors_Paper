@@ -25,7 +25,6 @@ class GameWorker(val context: Context, params: WorkerParameters): Worker(context
             val outPutData = Data.Builder()
                 .putInt(SCORE_VALUE, scoreValue)
                 .build()
-            Log.d(TAG, "ScoreValueToPass: $scoreValue")
             Log.d(TAG, "OutPutDataToPass: $outPutData")
             return Result.success(outPutData)
 
