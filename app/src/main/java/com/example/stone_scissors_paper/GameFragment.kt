@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.work.WorkInfo
 import com.example.stone_scissors_paper.data.GameData
 import com.example.stone_scissors_paper.data.ImageOption
 import com.example.stone_scissors_paper.databinding.FragmentGameBinding
@@ -40,7 +41,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val repository = ScoreRepository(requireContext())
-        val factory = ViewModelFactory(application = Application(), repository)
+        val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
         val playerScore = binding.firstPlayerScore
@@ -72,24 +73,29 @@ class GameFragment : Fragment() {
             val playersMove = 1
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(playersMove, phoneMove)
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
-                if (it.state.isFinished) {
-                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-                    Log.d(TAG, "workerResultValue: $workerResultValue")
-                    setScore(workerResultValue)
-                }
+                onStateChange(it, binding)
+//                if (it.state == WorkInfo.State.SUCCEEDED) {
+//                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+//                    Log.d(TAG, "workerResultValue: $workerResultValue")
+//                    setScore(workerResultValue)
+//                } else {
+//                    Log.d(TAG, "WorkInfoData is null")
+//                    //return@Observer
+//                }
             })
 //            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
 //                setScore(workerScore)
 //            })
         }
+
         binding.scissorsButton.setOnClickListener {
             val playersMove = 2
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(playersMove, phoneMove)
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
                 if (it.state.isFinished) {
@@ -108,7 +114,7 @@ class GameFragment : Fragment() {
             val playersMove = 3
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(playersMove, phoneMove)
+            viewModel.playGame(requireContext(), playersMove, phoneMove)
             setImages(playersMove, phoneMove)
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
                 if (it.state.isFinished) {
@@ -120,6 +126,13 @@ class GameFragment : Fragment() {
 //            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
 //                setScore(workerScore)
 //            })
+        }
+    }
+
+    private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) {
+        binding.apply {
+            val outPutData = it.outputData
+            setScore(outPutData.getInt(GameWorker.SCORE_VALUE, 0))
         }
     }
 

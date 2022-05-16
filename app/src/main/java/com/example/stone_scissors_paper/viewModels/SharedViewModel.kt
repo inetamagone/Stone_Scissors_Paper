@@ -13,20 +13,19 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "SharedViewModel"
 
-class SharedViewModel(application: Application, private val repository: ScoreRepository) : AndroidViewModel(application) {
+class SharedViewModel(private val repository: ScoreRepository) : ViewModel() {
 
     companion object {
         const val PLAYERS_MOVE = "players_move"
         const val PHONE_MOVE = "phone_move"
     }
-
 //    var workerScore: MutableLiveData<Int>? = null
     lateinit var outputWorkInfo: LiveData<WorkInfo>
 
-    private val workManager = WorkManager.getInstance(application)
-    private val oneTimeWorkRequest = OneTimeWorkRequest.Builder(GameWorker::class.java)
+    fun playGame(context: Context, playersMove: Int, phoneMove: Int): LiveData<WorkInfo> {
 
-    fun playGame(playersMove: Int, phoneMove: Int): LiveData<WorkInfo> {
+        val workManager = WorkManager.getInstance(context)
+        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(GameWorker::class.java)
 
         val data: Data = Data.Builder()
             .putInt(PLAYERS_MOVE, playersMove)
@@ -40,8 +39,8 @@ class SharedViewModel(application: Application, private val repository: ScoreRep
         workManager
             .enqueue(oneTimeWorkRequest.build())
 
-        outputWorkInfo = workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.build().id)
-        Log.d(TAG, "outputWorkInfo value: $outputWorkInfo")
+        outputWorkInfo = workManager
+            .getWorkInfoByIdLiveData(oneTimeWorkRequest.build().id).map { it }
         return outputWorkInfo
     }
 
