@@ -1,13 +1,14 @@
 package com.example.stone_scissors_paper.viewModels
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.stone_scissors_paper.repository.ScoreRepository
 
-class ViewModelFactory(private val scoreRepository: ScoreRepository): ViewModelProvider.Factory {
+class ViewModelFactory(private val application: Application, private val scoreRepository: ScoreRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(SharedViewModel::class.java)) {
-            return SharedViewModel(scoreRepository) as T
+            return SharedViewModel(application, scoreRepository) as T
         }
         throw IllegalArgumentException ("UnknownViewModel")
     }

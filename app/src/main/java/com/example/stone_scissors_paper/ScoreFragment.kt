@@ -1,6 +1,7 @@
 package com.example.stone_scissors_paper
 
 import android.app.AlertDialog
+import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,7 +40,7 @@ class ScoreFragment : Fragment() {
         val recyclerView = binding.scoreRecyclerView
 
         val repository = ScoreRepository(requireContext())
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(application = Application(), repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
         viewModel.getAllScoresFromDb().observe(viewLifecycleOwner) {

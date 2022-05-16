@@ -1,5 +1,6 @@
 package com.example.stone_scissors_paper.viewModels
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
@@ -12,24 +13,25 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "SharedViewModel"
 
-class SharedViewModel(private val repository: ScoreRepository) : ViewModel() {
+class SharedViewModel(application: Application, private val repository: ScoreRepository) : AndroidViewModel(application) {
 
     companion object {
         const val PLAYERS_MOVE = "players_move"
         const val PHONE_MOVE = "phone_move"
     }
 
-    var workerScore: MutableLiveData<Int>? = null
+//    var workerScore: MutableLiveData<Int>? = null
+    lateinit var outputWorkInfo: LiveData<WorkInfo>
 
-    fun playGame(context: Context, playersMove: Int, phoneMove: Int) {
-        val workManager = WorkManager.getInstance(context)
+    private val workManager = WorkManager.getInstance(application)
+    private val oneTimeWorkRequest = OneTimeWorkRequest.Builder(GameWorker::class.java)
+
+    fun playGame(playersMove: Int, phoneMove: Int): LiveData<WorkInfo> {
 
         val data: Data = Data.Builder()
             .putInt(PLAYERS_MOVE, playersMove)
             .putInt(PHONE_MOVE, phoneMove)
             .build()
-
-        val oneTimeWorkRequest = OneTimeWorkRequest.Builder(GameWorker::class.java)
 
         oneTimeWorkRequest
             .setInputData(data)
@@ -38,23 +40,23 @@ class SharedViewModel(private val repository: ScoreRepository) : ViewModel() {
         workManager
             .enqueue(oneTimeWorkRequest.build())
 
-//        val mObserver = Observer<WorkInfo> { myWorkInfo ->
-//            // do something with myString
-//        }
-        workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.build().id)
-            .observeForever {
-                val scoreValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
-                setWorkerScore(scoreValue)
-                Log.d(TAG, "it: $it")
-                Log.d(TAG, "scoreValue: $scoreValue")
-            }
-        // TODO: .removeObserver(Observer)
+        outputWorkInfo = workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.build().id)
+        Log.d(TAG, "outputWorkInfo value: $outputWorkInfo")
+        return outputWorkInfo
     }
 
-    private fun setWorkerScore(scoreValue: Int) {
-        workerScore?.value = scoreValue
-        //workerScore?.removeObserver(this)
-    }
+//    fun observeInViewModel(): Observer<WorkInfo> {
+//        return Observer { listOfWorkInfo ->
+//            if (listOfWorkInfo.state.isFinished) {
+//                val scoreValue = listOfWorkInfo.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+//                Log.d(TAG, "scoreValue: $scoreValue")
+//                setLiveData(scoreValue)
+//            }
+//        }
+//    }
+//    fun setLiveData(scoreValue: Int) {
+//        workerScore?.value = scoreValue
+//    }
 
     fun insertScoreInDb(gameData: GameData) {
         viewModelScope.launch(Dispatchers.IO) {

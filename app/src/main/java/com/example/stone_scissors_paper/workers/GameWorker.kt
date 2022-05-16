@@ -16,16 +16,24 @@ class GameWorker(val context: Context, params: WorkerParameters): Worker(context
     }
 
     override fun doWork(): Result {
-        val playersMove = inputData.getInt(SharedViewModel.PLAYERS_MOVE,0)
-        val phoneMove = inputData.getInt(SharedViewModel.PHONE_MOVE,0)
-        val scoreValue = setCurrentScore(playersMove, phoneMove)
 
-        val outPutData = Data.Builder()
-            .putInt(SCORE_VALUE, scoreValue)
-            .build()
-        Log.d(TAG, "ScoreValueToPass: $scoreValue")
-        Log.d(TAG, "OutPutDataToPass: $outPutData")
-        return Result.success(outPutData)
+        return try {
+            val playersMove = inputData.getInt(SharedViewModel.PLAYERS_MOVE,0)
+            val phoneMove = inputData.getInt(SharedViewModel.PHONE_MOVE,0)
+            val scoreValue = setCurrentScore(playersMove, phoneMove)
+
+            val outPutData = Data.Builder()
+                .putInt(SCORE_VALUE, scoreValue)
+                .build()
+            Log.d(TAG, "ScoreValueToPass: $scoreValue")
+            Log.d(TAG, "OutPutDataToPass: $outPutData")
+            return Result.success(outPutData)
+
+        } catch (throwable: Throwable) {
+            Log.e(TAG, "Error in catch")
+            throwable.printStackTrace()
+            Result.failure()
+        }
     }
 
     private fun setCurrentScore(playerMove: Int, phoneMove: Int): Int {

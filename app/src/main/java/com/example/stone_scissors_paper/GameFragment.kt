@@ -1,5 +1,6 @@
 package com.example.stone_scissors_paper
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.example.stone_scissors_paper.databinding.FragmentGameBinding
 import com.example.stone_scissors_paper.repository.ScoreRepository
 import com.example.stone_scissors_paper.viewModels.SharedViewModel
 import com.example.stone_scissors_paper.viewModels.ViewModelFactory
+import com.example.stone_scissors_paper.workers.GameWorker
 
 private const val TAG = "GameFragment"
 
@@ -38,7 +40,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val repository = ScoreRepository(requireContext())
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(application = Application(), repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
         val playerScore = binding.firstPlayerScore
@@ -70,21 +72,35 @@ class GameFragment : Fragment() {
             val playersMove = 1
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(requireContext(), playersMove, phoneMove)
+            viewModel.playGame(playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-                setScore(workerScore)
+            viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
+                if (it.state.isFinished) {
+                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+                    Log.d(TAG, "workerResultValue: $workerResultValue")
+                    setScore(workerResultValue)
+                }
             })
+//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+//                setScore(workerScore)
+//            })
         }
         binding.scissorsButton.setOnClickListener {
             val playersMove = 2
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(requireContext(), playersMove, phoneMove)
+            viewModel.playGame(playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-                setScore(workerScore)
+            viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
+                if (it.state.isFinished) {
+                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+                    Log.d(TAG, "workerResultValue: $workerResultValue")
+                    setScore(workerResultValue)
+                }
             })
+//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+//                setScore(workerScore)
+//            })
 //            setImages(playersMove, phoneMove)
 //            setCurrentScore(playersMove, phoneMove)
         }
@@ -92,12 +108,18 @@ class GameFragment : Fragment() {
             val playersMove = 3
             val phoneMove = (1..3).random()
 
-            viewModel.playGame(requireContext(), playersMove, phoneMove)
+            viewModel.playGame(playersMove, phoneMove)
             setImages(playersMove, phoneMove)
-
-            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
-                setScore(workerScore)
+            viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
+                if (it.state.isFinished) {
+                    val workerResultValue = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
+                    Log.d(TAG, "workerResultValue: $workerResultValue")
+                    setScore(workerResultValue)
+                }
             })
+//            viewModel.workerScore?.observe(viewLifecycleOwner, Observer { workerScore ->
+//                setScore(workerScore)
+//            })
         }
     }
 
