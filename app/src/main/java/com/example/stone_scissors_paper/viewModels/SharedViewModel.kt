@@ -9,7 +9,8 @@ import com.example.stone_scissors_paper.workers.GameWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SharedViewModel(private val repository: ScoreRepository, state: SavedStateHandle) : ViewModel() {
+class SharedViewModel(private val repository: ScoreRepository, state: SavedStateHandle) :
+    ViewModel() {
 
     companion object {
         const val PLAYERS_MOVE = "players_move"
@@ -19,11 +20,6 @@ class SharedViewModel(private val repository: ScoreRepository, state: SavedState
     lateinit var outputWorkInfo: LiveData<WorkInfo>
     private var gameData: GameData? = null
     var savedStateData = state.getLiveData("live_data", gameData)
-
-    fun saveState(gameData: GameData): MutableLiveData<GameData?> {
-        savedStateData.value = gameData
-        return savedStateData
-    }
 
     fun playGame(context: Context, playersMove: Int, phoneMove: Int): LiveData<WorkInfo> {
 
@@ -47,6 +43,11 @@ class SharedViewModel(private val repository: ScoreRepository, state: SavedState
         return outputWorkInfo
     }
 
+    fun saveState(gameData: GameData): MutableLiveData<GameData?> {
+        savedStateData.value = gameData
+        return savedStateData
+    }
+
     fun insertScoreInDb(gameData: GameData) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertScore(gameData)
@@ -60,5 +61,4 @@ class SharedViewModel(private val repository: ScoreRepository, state: SavedState
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAll()
         }
-
 }

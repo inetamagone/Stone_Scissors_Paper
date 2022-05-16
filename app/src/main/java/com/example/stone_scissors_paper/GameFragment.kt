@@ -1,11 +1,11 @@
 package com.example.stone_scissors_paper
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -17,8 +17,6 @@ import com.example.stone_scissors_paper.repository.ScoreRepository
 import com.example.stone_scissors_paper.viewModels.SharedViewModel
 import com.example.stone_scissors_paper.viewModels.ViewModelFactory
 import com.example.stone_scissors_paper.workers.GameWorker
-
-private const val TAG = "GameFragment"
 
 class GameFragment : Fragment() {
 
@@ -32,21 +30,24 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
-        Log.d(TAG, "OnCreateView")
 
         val repository = ScoreRepository(requireContext())
         val factory = ViewModelFactory(this, repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
+        val myScore = binding.firstPlayerScore
+        val phoneScore = binding.secondPlayerScore
+        val winMessage = binding.winMessage
+
         viewModel.savedStateData.observe(viewLifecycleOwner) { savedGameScore ->
             if (savedGameScore == null) {
-                binding.firstPlayerScore.text = "0"
-                binding.secondPlayerScore.text = "0"
-                binding.winMessage.text = getString(R.string.win_message)
+                myScore.text = "0"
+                phoneScore.text = "0"
+                winMessage.text = getString(R.string.win_message)
             } else {
-                binding.firstPlayerScore.text = savedGameScore.myScore
-                binding.secondPlayerScore.text = savedGameScore.phoneScore
-                binding.winMessage.text = savedGameScore.winnerMessage
+                myScore.text = savedGameScore.myScore
+                phoneScore.text = savedGameScore.phoneScore
+                winMessage.text = savedGameScore.winnerMessage
             }
         }
         return binding.root
@@ -61,9 +62,9 @@ class GameFragment : Fragment() {
 
         binding.restartButton.setOnClickListener {
             val scoreToSave = GameData(
-                myScore = playerScore.text.toString(),
-                phoneScore = phoneScore.text.toString(),
-                winnerMessage = winnerMessage.text.toString()
+                myScore = playerScore.formatting(),
+                phoneScore = phoneScore.formatting(),
+                winnerMessage = winnerMessage.formatting()
             )
             viewModel.insertScoreInDb(scoreToSave)
 
@@ -74,10 +75,14 @@ class GameFragment : Fragment() {
 
         val navController = Navigation.findNavController(view)
         binding.scoreButton.setOnClickListener {
-            val playersScoreToSave = playerScore.text.toString()
-            val phoneScoreToSave = phoneScore.text.toString()
-            val messageToSave = winnerMessage.text.toString()
-            val gameData = GameData(myScore = playersScoreToSave, phoneScore = phoneScoreToSave, winnerMessage = messageToSave)
+            val playersScoreToSave = playerScore.formatting()
+            val phoneScoreToSave = phoneScore.formatting()
+            val messageToSave = winnerMessage.formatting()
+            val gameData = GameData(
+                myScore = playersScoreToSave,
+                phoneScore = phoneScoreToSave,
+                winnerMessage = messageToSave
+            )
             viewModel.saveState(gameData)
             navController.navigate(R.id.action_gameFragment_to_scoreFragment, Bundle())
         }
@@ -91,8 +96,6 @@ class GameFragment : Fragment() {
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
                 if (it != null) {
                     onStateChange(it, binding)
-                } else {
-                    Log.d(TAG, "WorkInfo is null")
                 }
             })
         }
@@ -106,11 +109,10 @@ class GameFragment : Fragment() {
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
                 if (it != null) {
                     onStateChange(it, binding)
-                } else {
-                    Log.d(TAG, "WorkInfo is null")
                 }
             })
         }
+
         binding.stoneButton.setOnClickListener {
             val playersMove = 3
             val phoneMove = (1..3).random()
@@ -120,21 +122,31 @@ class GameFragment : Fragment() {
             viewModel.outputWorkInfo.observe(viewLifecycleOwner, Observer {
                 if (it != null) {
                     onStateChange(it, binding)
-                } else {
-                    Log.d(TAG, "WorkInfo is null")
                 }
             })
         }
     }
 
-    private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) {
+    override fun onStop() {
+        super.onStop()
+        val playersScoreToSave = binding.firstPlayerScore.formatting()
+        val phoneScoreToSave = binding.secondPlayerScore.formatting()
+        val messageToSave = binding.winMessage.formatting()
+        val gameData = GameData(
+            myScore = playersScoreToSave,
+            phoneScore = phoneScoreToSave,
+            winnerMessage = messageToSave
+        )
+        viewModel.saveState(gameData)
+    }
+
+    private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) =
         binding.apply {
             val outPutData = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
             if (outPutData != 0) {
                 setScore(outPutData)
             }
         }
-    }
 
     private fun setImages(playersMove: Int, phoneMove: Int) {
         when (playersMove) {
@@ -162,26 +174,30 @@ class GameFragment : Fragment() {
     }
 
     // result = 1 -> equals; result = 2 -> phone wins; result = 3 -> player wins
-    private fun setScore(workerScore: Int) {
-        // equals
-        if (workerScore == 1) {
-            binding.winMessage.text = getString(R.string.score_equals)
+    private fun setScore(workerScore: Int) =
+        when (workerScore) {
+            // Equals
+            1 -> {
+                binding.winMessage.text = getString(R.string.score_equals)
 
-        } // Phone wins
-        else if (workerScore == 2) {
-            val scoreValue = binding.secondPlayerScore.text.toString().toInt() + 1
-            binding.secondPlayerScore.text = scoreValue.toString()
-            binding.winMessage.text = getString(R.string.phone_wins)
-        } // Player wins
-        else {
-            val scoreValue = binding.firstPlayerScore.text.toString().toInt() + 1
-            binding.firstPlayerScore.text = scoreValue.toString()
-            binding.winMessage.text = getString(R.string.you_win)
+            } // Phone wins
+            2 -> {
+                val scoreValue = binding.secondPlayerScore.formatting().toInt() + 1
+                binding.secondPlayerScore.text = scoreValue.toString()
+                binding.winMessage.text = getString(R.string.phone_wins)
+            } // Player wins
+            else -> {
+                val scoreValue = binding.firstPlayerScore.formatting().toInt() + 1
+                binding.firstPlayerScore.text = scoreValue.toString()
+                binding.winMessage.text = getString(R.string.you_win)
+            }
         }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+private fun TextView?.formatting(): String =
+    this?.text.toString()

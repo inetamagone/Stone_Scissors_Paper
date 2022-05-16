@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@color/background">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <Button
+                android:id="@+id/restart_button"
+                android:layout_width="@dimen/space_120"
+                android:layout_height="@dimen/space_50"
+                android:layout_weight="1"
+                android:backgroundTint="@color/background_dark"
+                android:fontFamily="serif"
+                android:shadowColor="@color/purple_700"
+                android:shadowDx="10"
+                android:shadowRadius="16"
+                android:text="@string/restart_btn_text"
+                android:textColor="@color/light_grey"
+                android:textSize="@dimen/text_16"
+                android:textStyle="bold" />
+            <Space
+                android:layout_width="@dimen/space_120"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/win_message"
+                android:layout_width="@dimen/space_140"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="@dimen/text_25"
+                android:textColor="@color/light_grey"
+                android:textStyle="italic"
+                android:fontFamily="serif"
+                android:text="@string/win_message"/>
+            <Space
+                android:layout_width="@dimen/space_120"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/score_button"
+                android:layout_width="@dimen/space_120"
+                android:layout_height="@dimen/space_50"
+                android:text="@string/scores_btn_text"
+                android:textSize="@dimen/text_16"
+                android:textColor="@color/light_grey"
+                android:textStyle="bold"
+                android:fontFamily="serif"
+                android:backgroundTint="@color/button_score"
+                android:shadowRadius="16"
+                android:shadowColor="@color/purple_700"
+                android:shadowDx="10"
+                android:layout_weight="1"/>
+        </LinearLayout>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_5" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/first_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/me_game"
+                    android:textSize="@dimen/text_20"
+                    android:textColor="@color/light_grey"
+                    android:textStyle="bold"
+                    android:fontFamily="serif"
+                    android:paddingBottom="@dimen/space_10"/>
+                <Space
+                    android:layout_width="@dimen/space_20"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/first_player_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/first_score_text"
+                    android:textSize="@dimen/text_20"
+                    android:textColor="@color/light_grey"
+                    android:textStyle="bold"
+                    android:fontFamily="serif" />
+            </LinearLayout>
+            <Space
+                android:layout_width="@dimen/space_20"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/first_player_image"
+                android:layout_width="@dimen/space_200"
+                android:layout_height="@dimen/space_200"
+                android:src="@drawable/scissors"/>
+            <Space
+                android:layout_width="@dimen/space_40"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/second_player_image"
+                android:layout_width="@dimen/space_200"
+                android:layout_height="@dimen/space_200"
+                android:src="@drawable/stone" />
+            <Space
+                android:layout_width="@dimen/space_20"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/second_player"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/my_phone_game"
+                    android:textSize="@dimen/text_20"
+                    android:textColor="@color/light_grey"
+                    android:textStyle="bold"
+                    android:fontFamily="serif"
+                    android:paddingBottom="@dimen/space_10"/>
+                <Space
+                    android:layout_width="@dimen/space_20"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/second_player_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone_score_text"
+                    android:textSize="@dimen/text_20"
+                    android:textColor="@color/light_grey"
+                    android:textStyle="bold"
+                    android:fontFamily="serif" />
+            </LinearLayout>
+        </LinearLayout>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_5" />
+        <LinearLayout
+            android:id="@+id/image_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+            <ImageView
+                android:id="@+id/paper_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/paper"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+            <ImageView
+                android:id="@+id/scissors_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/scissors"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+            <ImageView
+                android:id="@+id/stone_button"
+                android:layout_width="@dimen/space_90"
+                android:layout_height="@dimen/space_90"
+                android:src="@drawable/stone"
+                android:layout_weight="1"
+                android:tooltipText="Choose and press your move" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
