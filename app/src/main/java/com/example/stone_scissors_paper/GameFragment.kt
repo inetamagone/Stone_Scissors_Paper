@@ -61,12 +61,8 @@ class GameFragment : Fragment() {
         val winnerMessage = binding.winMessage
 
         binding.restartButton.setOnClickListener {
-            val scoreToSave = GameData(
-                myScore = playerScore.formatting(),
-                phoneScore = phoneScore.formatting(),
-                winnerMessage = winnerMessage.formatting()
-            )
-            viewModel.insertScoreInDb(scoreToSave)
+            val gameData = setDataForSaving(playerScore.formatting(), phoneScore.formatting(), winnerMessage.formatting())
+            viewModel.insertScoreInDb(gameData)
 
             playerScore.text = "0"
             phoneScore.text = "0"
@@ -78,11 +74,8 @@ class GameFragment : Fragment() {
             val playersScoreToSave = playerScore.formatting()
             val phoneScoreToSave = phoneScore.formatting()
             val messageToSave = winnerMessage.formatting()
-            val gameData = GameData(
-                myScore = playersScoreToSave,
-                phoneScore = phoneScoreToSave,
-                winnerMessage = messageToSave
-            )
+            val gameData = setDataForSaving(playersScoreToSave, phoneScoreToSave, messageToSave)
+
             viewModel.saveState(gameData)
             navController.navigate(R.id.action_gameFragment_to_scoreFragment, Bundle())
         }
@@ -132,14 +125,15 @@ class GameFragment : Fragment() {
         val playersScoreToSave = binding.firstPlayerScore.formatting()
         val phoneScoreToSave = binding.secondPlayerScore.formatting()
         val messageToSave = binding.winMessage.formatting()
-        val gameData = GameData(
-            myScore = playersScoreToSave,
-            phoneScore = phoneScoreToSave,
-            winnerMessage = messageToSave
-        )
+        val gameData = setDataForSaving(playersScoreToSave, phoneScoreToSave, messageToSave)
+
         viewModel.saveState(gameData)
     }
 
+    private fun setDataForSaving(playerScore: String, phoneScore: String, message: String): GameData {
+        return GameData(myScore = playerScore, phoneScore = phoneScore, winnerMessage = message)
+    }
+    
     private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) =
         binding.apply {
             val outPutData = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
