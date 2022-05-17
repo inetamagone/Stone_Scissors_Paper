@@ -61,7 +61,11 @@ class GameFragment : Fragment() {
         val winnerMessage = binding.winMessage
 
         binding.restartButton.setOnClickListener {
-            val gameData = setDataForSaving(playerScore.formatting(), phoneScore.formatting(), winnerMessage.formatting())
+            val gameData = setDataForSaving(
+                playerScore.formatting(),
+                phoneScore.formatting(),
+                winnerMessage.formatting()
+            )
             viewModel.insertScoreInDb(gameData)
 
             playerScore.text = "0"
@@ -71,12 +75,6 @@ class GameFragment : Fragment() {
 
         val navController = Navigation.findNavController(view)
         binding.scoreButton.setOnClickListener {
-            val playersScoreToSave = playerScore.formatting()
-            val phoneScoreToSave = phoneScore.formatting()
-            val messageToSave = winnerMessage.formatting()
-            val gameData = setDataForSaving(playersScoreToSave, phoneScoreToSave, messageToSave)
-
-            viewModel.saveState(gameData)
             navController.navigate(R.id.action_gameFragment_to_scoreFragment, Bundle())
         }
 
@@ -130,10 +128,13 @@ class GameFragment : Fragment() {
         viewModel.saveState(gameData)
     }
 
-    private fun setDataForSaving(playerScore: String, phoneScore: String, message: String): GameData {
-        return GameData(myScore = playerScore, phoneScore = phoneScore, winnerMessage = message)
-    }
-    
+    private fun setDataForSaving(
+        playerScore: String,
+        phoneScore: String,
+        message: String
+    ): GameData =
+        GameData(myScore = playerScore, phoneScore = phoneScore, winnerMessage = message)
+
     private fun onStateChange(it: WorkInfo, binding: FragmentGameBinding) =
         binding.apply {
             val outPutData = it.outputData.getInt(GameWorker.SCORE_VALUE, 0)
