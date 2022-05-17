@@ -12,16 +12,14 @@ class ScoreRepository(context: Context) {
 
     private val database = ScoreDatabase.createDatabase(context)
 
-    suspend fun insertScore(gameData: GameData) {
+    suspend fun insertScore(gameData: GameData) =
         CoroutineScope(Dispatchers.IO).launch {
             database.getScoreDao().insertScore(gameData)
         }
-    }
 
     fun getScores(): LiveData<List<GameData>> =
         database.getScoreDao().getAllScores()
 
     suspend fun deleteAll() =
         database.getScoreDao().deleteAll()
-
 }

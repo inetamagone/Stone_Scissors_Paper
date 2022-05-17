@@ -39,7 +39,7 @@ class ScoreFragment : Fragment() {
         val recyclerView = binding.scoreRecyclerView
 
         val repository = ScoreRepository(requireContext())
-        val factory = ViewModelFactory(repository)
+        val factory = ViewModelFactory(this, repository)
         viewModel = ViewModelProvider(this, factory)[SharedViewModel::class.java]
 
         viewModel.getAllScoresFromDb().observe(viewLifecycleOwner) {
